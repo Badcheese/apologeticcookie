@@ -7,28 +7,35 @@ import React from 'react';
 import getDomePositions from '../util/sphereMath';
 import Image from './Image';
 
-const Dome = props => {
-  const RADIUS = 4 + (Math.floor(props.images.length / 4)); // This is pretty arbitrary
-  const positions = getDomePositions(props.images.length, 1);
+const Dome = ({arts, images, fetchRelated}) => {
+  const RADIUS = 4 + (Math.floor(images.length / 4)); // This is pretty arbitrary
+  const positions = getDomePositions(images.length, 1);
 
   return (
     <Entity>
       {
-        props.images.map((imageUrl, index) => {
-          const x = positions[index][0] * RADIUS;
-          const y = positions[index][1] * RADIUS;
+        (function() {
+          const jsxImageList = [];
+          var index = 0;
+          for (var key in arts) {
+            var imageUrl = arts[key].smallUrl;
+            const x = positions[index][0] * RADIUS;
+            const y = positions[index][1] * RADIUS;
 
-          // The negative flips all items from behind the camera to in front
-          const z = positions[index][2] * -RADIUS;
-          return (
-            <Image
-            key={imageUrl}
-            src={imageUrl}
-            position={`${x} ${y} ${z}`}
-            onImageClick={props.onImageClick}
-            />
-          );
-        })
+            // The negative flips all items from behind the camera to in front
+            const z = positions[index][2] * -RADIUS;
+            index++;
+            jsxImageList.push(
+              <Image
+              key={imageUrl}
+              src={imageUrl}
+              position={`${x} ${y} ${z}`}
+              onImageClick={fetchRelated.bind(null, arts[key].id)}
+              />
+            );
+          }
+          return jsxImageList;
+        })()
       }
     </Entity>
   );
