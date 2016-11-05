@@ -9,7 +9,7 @@ import ArtMapper from './ArtMapper';
 
 const TestScene = ({arts}) => (
   <Scene fog="type: linear; color: #AAA; far: 60; near: 10" >
-    <Entity id="camera" active camera position="-8 2 0" rotation="0 -90 0" wasd-controls="" />
+    <Entity id="camera" active camera position="-8 2 0" rotation="0 -90 0" wasd-controls look-controls />
 
     <Entity material="color: #666;" geometry="primitive: sphere; radius: 100" scale="1 1 -1"/>
 
@@ -20,7 +20,7 @@ const TestScene = ({arts}) => (
       geometry="primitive: plane; height: 500; width: 500"
       position="0 -0.5 0"
       rotation="-90 0 0"
-      material="color: #666; metalness: 0.5"
+      material="src: url(../assets/concrete5.jpg); repeat: 25 25"
     />
 
       <Ceiling position="0 18 0"/>
@@ -29,14 +29,14 @@ const TestScene = ({arts}) => (
       geometry="primitive: plane; height: 50; width: 500"
       position="0 0 -9"
       rotation="0 0 0"
-      material="side: double; color: #666; metalness: 0.5"
+      material="side: double; src: url(../assets/concrete5.jpg); repeat: 25 25; metalness: 0.5"
     />
 
     <Entity
       geometry="primitive: plane; height: 50; width: 500"
       position="0 0 9"
       rotation="0 0 0"
-      material="side: double; color: #666; metalness: 0.5"
+      material="side: double; src: url(../assets/concrete5.jpg); repeat: 25 25; metalness: 0.5"
     />
     <Entity
       light="type: spot; angle: 100; color: red"
@@ -44,6 +44,25 @@ const TestScene = ({arts}) => (
       look-at=""
       rotation="180 90 0"
       position="72 4 2"/>
+
+    <Entity
+      light="type: spot; angle: 100; color: blue; penumbra: 1; intensity: 100"
+      look-at=""
+      rotation="90 270 0"
+      position="62 30 0"/>
+
+    <Entity
+      light="type: spot; angle: 100; color: blue; penumbra: 1; intensity: 100"
+      look-at=""
+      rotation="90 270 0"
+      position="100 30 0"/>  
+
+    <Entity
+      light="type: spot; angle: 100; color: blue; penumbra: 1; intensity: 100"
+      look-at=""
+      rotation="90 270 0"
+      position="100 30 0"/>  
+
 
     <Entity light="type: hemisphere; color: #999; groundColor: #666; intensity: 2"/>
 
@@ -56,26 +75,4 @@ TestScene.propTypes = {
 };
 
 export default TestScene;
-// <Entity geometry="primitive: box; height: 3; width: 3; depth: 1"
-// material={{src: `url(${images[0]})`}}
-// position="0 3 9"/>
 
-// <Entity geometry="primitive: box; height: 3; width: 3; depth: 1"
-// material={{src: `url(${images[1]})`}}
-// position="6 3 9"/>
-
-// <Entity geometry="primitive: box; height: 3; width: 3; depth: 1"
-// material={{src: `url(${images[2]})`}}
-// position="12 3 9"/>
-
-// <Entity geometry="primitive: box; height: 3; width: 3; depth: 1"
-// material={{src: `url(${images[0]})`}}
-// position="0 3 -9"/>
-
-// <Entity geometry="primitive: box; height: 3; width: 3; depth: 1"
-// material={{src: `url(${images[1]})`}}
-// position="6 3 -9"/>
-
-// <Entity geometry="primitive: box; height: 3; width: 3; depth: 1"
-// material={{src: `url(${images[2]})`}}
-// position="12 3 -9"/>
