@@ -141,7 +141,7 @@ class Container extends React.Component {
   render() {
     return (
       <div>
-        <Sidebar handleUploadComplete={this.handleUploadComplete} toggleDemo={this.props.toggleDemo} />
+        {/*<Sidebar handleUploadComplete={this.handleUploadComplete} toggleDemo={this.props.toggleDemo} />*/}
         { this.state.scene === 'PhodomeScene' ? <PhodomeScene arts={this.state.arts} fetchRelated={this.fetchRelatedArts.bind(this)} /> : null }
         { this.state.scene === 'TestScene' ? <TestScene arts={this.state.arts} /> : null }
       </div>

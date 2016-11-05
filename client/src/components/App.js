@@ -33,9 +33,6 @@ class App extends React.Component {
 
     return (
       <div>
-        <div style={style}>
-          <HomePage toggleDemo={this.toggleDemo}/>
-        </div>
         {
           this.state.showHomePage ?
             null :
