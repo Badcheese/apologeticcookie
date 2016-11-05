@@ -56,7 +56,7 @@ const ArtMapper = props => {
               <Art
               key={imageUrl}
               src={imageUrl}
-              position={`${x} ${6} ${artSide}`}/>
+              position={`${x} ${5} ${artSide}`}/>
 
               <Entity 
               light="type: spot; angle: 30; penumbra: .4"
@@ -64,8 +64,8 @@ const ArtMapper = props => {
               look-at="" 
               rotation={`${lightX} ${180} ${0}`}
               position={`${x} ${14} ${lightSide}`}/>
+              </Entity>
 
-            </Entity>
           );
         })
       }
