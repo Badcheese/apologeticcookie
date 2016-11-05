@@ -9,6 +9,8 @@ class Container extends React.Component {
     super();
     this.state = {
       arts: [],
+      numberOfClicks: 0,
+      relatedArts: []
     };
 
     this.handleUploadComplete = this.handleUploadComplete.bind(this);
@@ -73,8 +75,18 @@ class Container extends React.Component {
   fetchRelatedArts(id) {
     const context = this;
     const artPromises = [];
-    const arts = this.state.arts;
-    var clickedArt = arts.filter(function(art) { return art.id === id; })[0];
+    var arts = this.state.arts;
+    const numberOfClicks = this.state.numberOfClicks + 1;
+    const relatedArts = this.state.relatedArts;
+    var clickedArtIndex;
+    var clickedArt = arts.filter(function(art, index) {
+      if (art.id === id) {
+        clickedArtIndex = index;
+        return true;
+      }
+      return false;
+    })[0];
+    // arts.splice(clickedArtIndex, 1);
     artPromises.push(axios.get('/api/arts/related/' + id));
     axios.all(artPromises)
     .then(axios.spread(function() {
@@ -85,22 +97,33 @@ class Container extends React.Component {
         }
         return '/api/get/' + url;
       };
-      const newArts = arguments[0].data;
+      var newArts = arguments[0].data;
       newArts.forEach(function(newArt) {
         newArt.imageUrl = transformImageUrl(newArt.smallUrl);
       });
       newArts.push(clickedArt);
       newArts.filter(function(art) { return art !== undefined; });
-      const uniqueArts = [];
-      newArts.forEach(function(art) {
-        if (!uniqueArts.includes(art)) {
-          uniqueArts.push(art);
-        }
-      });
-      context.setState({
-        arts: uniqueArts,
-        scene: 'PhodomeScene'
-      });
+      newArts = newArts.concat(relatedArts);
+      if (numberOfClicks < 4) {
+        context.setState({
+          relatedArts: newArts,
+          scene: 'PhodomeScene',
+          numberOfClicks: numberOfClicks
+        });
+        context.fetchArts();
+      } else {
+        const uniqueArts = [];
+        newArts.forEach(function(art) {
+          if (!uniqueArts.includes(art)) {
+            uniqueArts.push(art);
+          }
+        });
+        context.setState( {
+          arts: uniqueArts,
+          scene: 'TestScene'
+        });
+      }
+    
     }));
   }
 
@@ -119,7 +142,7 @@ class Container extends React.Component {
     return (
       <div>
         <Sidebar handleUploadComplete={this.handleUploadComplete} toggleDemo={this.props.toggleDemo} />
-        { this.state.scene === 'PhodomeScene' ? <PhodomeScene arts={this.state.arts} fetchRelated={this.changeScene} /> : null }
+        { this.state.scene === 'PhodomeScene' ? <PhodomeScene arts={this.state.arts} fetchRelated={this.fetchRelatedArts.bind(this)} /> : null }
         { this.state.scene === 'TestScene' ? <TestScene arts={this.state.arts} /> : null }
       </div>
     );

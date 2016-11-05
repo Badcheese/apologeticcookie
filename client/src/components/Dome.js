@@ -24,10 +24,10 @@ const Dome = ({arts, fetchRelated}) => {
             index++;
             return (
               <Image
-              key={Math.random()}
+              key={art.id}
               src={imageUrl}
               position={`${x} ${y} ${z}`}
-              onImageClick={fetchRelated.bind(null, 'TestScene')}
+              onImageClick={fetchRelated.bind(null, art.id)}
               />
             );
           })

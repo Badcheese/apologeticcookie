@@ -9,7 +9,7 @@ import ArtMapper from './ArtMapper';
 
 const TestScene = ({arts}) => (
   <Scene fog="type: linear; color: #AAA; far: 60; near: 10" >
-    <Entity id="camera" active camera position="-8 2 0" rotation="0 -90 0" wasd-controls look-controls />
+    <Entity id="camera" active camera position="-8 2 0" rotation="0 -90 0" wasd-controls="acceleration: 200" look-controls />
 
     <Entity material="color: #666;" geometry="primitive: sphere; radius: 100" scale="1 1 -1"/>
 
