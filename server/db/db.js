@@ -9,6 +9,6 @@
 // c) start server using 'node app.js'
 
 var Sequelize = require('sequelize');
-var db = new Sequelize(process.env.DATABASE_URL || 'postgresql://localhost/phodome');
+var db = new Sequelize('postgres://postgres:password@54.244.57.125:5432/phodome');
 
 module.exports = db;

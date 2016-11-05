@@ -6,7 +6,7 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      showHomePage: true
+      showHomePage: false
     };
 
     this.toggleDemo = this.toggleDemo.bind(this);
