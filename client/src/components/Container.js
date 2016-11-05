@@ -48,7 +48,7 @@ class Container extends React.Component {
     const artPromises = [];
     const arts = this.state.arts;
     const newArts = [];
-    for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 25; i++) {
       artPromises.push(axios.get('/api/arts'));
     }
     axios.all(artPromises)
@@ -86,7 +86,7 @@ class Container extends React.Component {
       }
       return false;
     })[0];
-    // arts.splice(clickedArtIndex, 1);
+    arts.splice(clickedArtIndex, 1);
     artPromises.push(axios.get('/api/arts/related/' + id));
     axios.all(artPromises)
     .then(axios.spread(function() {
@@ -101,16 +101,15 @@ class Container extends React.Component {
       newArts.forEach(function(newArt) {
         newArt.imageUrl = transformImageUrl(newArt.smallUrl);
       });
-      newArts.push(clickedArt);
+      newArts.unshift(clickedArt);
       newArts.filter(function(art) { return art !== undefined; });
       newArts = newArts.concat(relatedArts);
-      if (numberOfClicks < 4) {
+      if (numberOfClicks < 3) {
         context.setState({
           relatedArts: newArts,
           scene: 'PhodomeScene',
           numberOfClicks: numberOfClicks
         });
-        context.fetchArts();
       } else {
         const uniqueArts = [];
         newArts.forEach(function(art) {

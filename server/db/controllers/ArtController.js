@@ -35,14 +35,36 @@ module.exports = {
     });
   },
 
-  getRelatedArts: function getRelatedArts(id, cb) {
+  getRelatedArts: function getRelatedArts(id, cb, repeat) {
+    var allRelatedArts = [];
     ArtJoin.findAll({where: {id1: id}})
     .then(function(artjoins) {
       artjoins = artjoins.map(function(artjoin) { return artjoin.dataValues.id2; });
       Art.findAll({where: {id: artjoins}})
       .then(function(arts) {
         arts = arts.map(function(art) { return art.dataValues; });
-        cb(arts);
+        allRelatedArts = allRelatedArts.concat(arts);
+        const queryArray = arts.map(function(art) { return art.id; });
+        ArtJoin.findAll({where: {id: queryArray} })
+        .then(function(artjoins) {
+          artjoins = artjoins.map(function(artjoin) { return artjoin.dataValues.id2; });
+          const queryArray = artjoins.map(function(artjoin) { return artjoin.id2; });
+          Art.findAll({where: {id: queryArray}})
+          .then(function(arts) {
+            arts = arts.map(function(art) { return art.dataValues; });
+            allRelatedArts = allRelatedArts.concat(arts);
+          });
+        });
+        const wasAdded = [];
+        allRelatedArts.filter(function(art) {
+          if (!wasAdded.includes(art.id)) {
+            wasAdded.push(art.id);
+            return true;
+          }
+          return false;
+        });
+
+        cb(allRelatedArts);
       });
     })
     .catch(function(e) {
