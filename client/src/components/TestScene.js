@@ -8,8 +8,9 @@ import Ceiling from './Ceiling';
 import ArtMapper from './ArtMapper';
 
 const TestScene = ({arts}) => (
-  <Scene fog="type: linear; color: #AAA" >
+  <Scene fog="type: linear; color: #AAA; far: 60; near: 10" >
     <Entity id="camera" active camera position="-8 2 0" rotation="0 -90 0" wasd-controls="" />
+
     <Entity material="color: #666;" geometry="primitive: sphere; radius: 100" scale="1 1 -1"/>
 
     <Entity geometry="primitive: box; width: 2, height: 1, depth: 3"
