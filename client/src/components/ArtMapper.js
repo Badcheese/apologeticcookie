@@ -1,7 +1,7 @@
 import 'aframe';
 import 'aframe-animation-component';
-import 'aframe-text-component';
 import { Entity } from 'aframe-react';
+import Plaque from './Plaque';
 import React from 'react';
 
 import Art from './Bart';
@@ -23,9 +23,10 @@ const ArtMapper = props => {
           lightX +=12; 
           count++;
           return (
-            <Entity>
+            <Entity key={imageUrl}>
+              <Plaque position={`${x} ${3} ${9}`}
+                      rotation="0 90 0" text="Pooping butt art."/>
               <Art
-              key={imageUrl}
               src={imageUrl}
               position={`${x} ${3} ${9}`}/>
 

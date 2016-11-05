@@ -9,8 +9,8 @@ import ArtMapper from './ArtMapper';
 
 const TestScene = ({images}) => (
   <Scene fog="type: linear; color: #AAA" >
-    <Entity id="camera" active camera position="-8 2 0" rotation="0 -90 0" wasd-controls="" />
-    <Entity material="color: #666;" geometry="primitive: sphere; radius: 100" scale="1 1 -1"/>
+    <Entity id="camera" active camera position="-8 2 0" rotation="0 -90 0" look-controls wasd-controls/>
+    <Entity material="color: #666" geometry="primitive: sphere; radius: 100" scale="1 1 -1"/>
 
     <Entity geometry="primitive: box; width: 2, height: 1, depth: 3"
             position="0 0 -4" material="color: #666; metalness: 0.5" />
@@ -55,26 +55,3 @@ TestScene.propTypes = {
 };
 
 export default TestScene;
-// <Entity geometry="primitive: box; height: 3; width: 3; depth: 1"
-// material={{src: `url(${images[0]})`}}
-// position="0 3 9"/>
-
-// <Entity geometry="primitive: box; height: 3; width: 3; depth: 1"
-// material={{src: `url(${images[1]})`}}
-// position="6 3 9"/>
-
-// <Entity geometry="primitive: box; height: 3; width: 3; depth: 1"
-// material={{src: `url(${images[2]})`}}
-// position="12 3 9"/>
-
-// <Entity geometry="primitive: box; height: 3; width: 3; depth: 1"
-// material={{src: `url(${images[0]})`}}
-// position="0 3 -9"/>
-
-// <Entity geometry="primitive: box; height: 3; width: 3; depth: 1"
-// material={{src: `url(${images[1]})`}}
-// position="6 3 -9"/>
-
-// <Entity geometry="primitive: box; height: 3; width: 3; depth: 1"
-// material={{src: `url(${images[2]})`}}
-// position="12 3 -9"/>
