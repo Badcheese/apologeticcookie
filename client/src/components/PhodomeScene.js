@@ -9,7 +9,7 @@ import Sky from './Sky';
 import Image from './Image';
 import Dome from './Dome';
 
-const PhodomeScene = ({images, fetchRelated, arts}) => (
+const PhodomeScene = ({fetchRelated, arts}) => (
   <Scene>
     <Camera>
       <a-cursor
@@ -19,7 +19,7 @@ const PhodomeScene = ({images, fetchRelated, arts}) => (
 
     <Sky color="#000"/>
 
-    <Dome arts={arts} images={images} fetchRelated={fetchRelated} />
+    <Dome arts={arts} fetchRelated={fetchRelated} />
 
     <Entity light={{type: 'ambient', color: '#888', intensity: 2}}/>
 
@@ -27,8 +27,7 @@ const PhodomeScene = ({images, fetchRelated, arts}) => (
 );
 
 PhodomeScene.propTypes = {
-  images: React.PropTypes.array.isRequired,
-  arts: React.PropTypes.object.isRequired,
+  arts: React.PropTypes.array.isRequired,
   fetchRelated: React.PropTypes.func.isRequired
 };
 

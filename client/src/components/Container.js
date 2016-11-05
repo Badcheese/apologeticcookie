@@ -9,17 +9,17 @@ class Container extends React.Component {
     super();
     this.state = {
       arts: [],
-      images: []
     };
 
     this.handleUploadComplete = this.handleUploadComplete.bind(this);
     // this.fetchImages = this.fetchImages.bind(this);
     this.fetchArts = this.fetchArts.bind(this);
     this.fetchRelatedArts = this.fetchRelatedArts.bind(this);
+    this.changeScene = this.changeScene.bind(this);
   }
 
   componentDidMount() {
-    this.fetchImages();
+    this.fetchArts();
   }
 
   // fetchImages() {
@@ -45,13 +45,12 @@ class Container extends React.Component {
     const context = this;
     const artPromises = [];
     const arts = this.state.arts;
-    const newArts = {};
+    const newArts = [];
     for (var i = 0; i < 10; i++) {
       artPromises.push(axios.get('/api/arts'));
     }
     axios.all(artPromises)
     .then(axios.spread(function() {
-      let imageUrls = [];
       let newArt;
       const transformImageUrl = function transformImageUrl(url) {
         while (url.indexOf('/') >= 0) {
@@ -61,13 +60,11 @@ class Container extends React.Component {
       };
       for (var key in arguments) {
         newArt = arguments[key].data;
-        newArts[key] = newArt;
-        newArt.smallUrl = transformImageUrl(newArt.smallUrl);
-        imageUrls.push(newArt.smallUrl);
+        newArt.imageUrl = transformImageUrl(newArt.smallUrl);
+        newArt ? newArts.push(newArt) : 0;
       }
       context.setState({
         arts: newArts,
-        images: imageUrls,
         scene: 'PhodomeScene'
       });
     }));
@@ -77,10 +74,10 @@ class Container extends React.Component {
     const context = this;
     const artPromises = [];
     const arts = this.state.arts;
+    var clickedArt = arts.filter(function(art) { return art.id === id; })[0];
     artPromises.push(axios.get('/api/arts/related/' + id));
     axios.all(artPromises)
     .then(axios.spread(function() {
-      let imageUrls = [];
       let newArt;
       const transformImageUrl = function transformImageUrl(url) {
         while (url.indexOf('/') >= 0) {
@@ -90,12 +87,18 @@ class Container extends React.Component {
       };
       const newArts = arguments[0].data;
       newArts.forEach(function(newArt) {
-        newArt.smallUrl = transformImageUrl(newArt.smallUrl);
-        imageUrls.push(newArt.smallUrl);
+        newArt.imageUrl = transformImageUrl(newArt.smallUrl);
+      });
+      newArts.push(clickedArt);
+      newArts.filter(function(art) { return art !== undefined; });
+      const uniqueArts = [];
+      newArts.forEach(function(art) {
+        if (!uniqueArts.includes(art)) {
+          uniqueArts.push(art);
+        }
       });
       context.setState({
-        arts: newArts,
-        images: imageUrls,
+        arts: uniqueArts,
         scene: 'PhodomeScene'
       });
     }));
@@ -109,15 +112,15 @@ class Container extends React.Component {
   }
 
   handleUploadComplete() {
-    this.fetchImages();
+    this.fetchArts();
   }
 
   render() {
     return (
       <div>
         <Sidebar handleUploadComplete={this.handleUploadComplete} toggleDemo={this.props.toggleDemo} />
-        { this.state.scene === 'PhodomeScene' ? <PhodomeScene arts={this.state.arts} images={this.state.images} fetchRelated={this.fetchRelatedArts} /> : null }
-        { this.state.scene === 'TestScene' ? <TestScene images={this.state.images} /> : null }
+        { this.state.scene === 'PhodomeScene' ? <PhodomeScene arts={this.state.arts} fetchRelated={this.changeScene} /> : null }
+        { this.state.scene === 'TestScene' ? <TestScene arts={this.state.arts} /> : null }
       </div>
     );
   }

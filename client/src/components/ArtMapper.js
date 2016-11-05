@@ -16,11 +16,12 @@ const ArtMapper = props => {
   return (
     <Entity>
       {
-        props.images.map((imageUrl, index) => {
+        props.arts.map((art, index) => {
           // The negative flips all items from behind the camera to in front
           // 8 12 6 light position
+          var imageUrl = art.imageUrl;
           x += 8;
-          lightX +=12; 
+          lightX += 12; 
           count++;
           return (
             <Entity>

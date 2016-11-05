@@ -7,7 +7,7 @@ import Ceiling from './Ceiling';
 
 import ArtMapper from './ArtMapper';
 
-const TestScene = ({images}) => (
+const TestScene = ({arts}) => (
   <Scene fog="type: linear; color: #AAA" >
     <Entity id="camera" active camera position="-8 2 0" rotation="0 -90 0" wasd-controls="" />
     <Entity material="color: #666;" geometry="primitive: sphere; radius: 100" scale="1 1 -1"/>
@@ -46,12 +46,12 @@ const TestScene = ({images}) => (
 
     <Entity light="type: hemisphere; color: #999; groundColor: #666; intensity: 2"/>
 
-    <ArtMapper images={ images } />
+    <ArtMapper arts={ arts } />
   </Scene>
 );
 
 TestScene.propTypes = {
-  images: React.PropTypes.array.isRequired
+  arts: React.PropTypes.array.isRequired
 };
 
 export default TestScene;
