@@ -1,12 +1,13 @@
 const request = require('request');
 const ArtController = require('./db/controllers/ArtController');
 const requestsPerTick = 1;
-const period = 10;
-const startingId = 500000;
-const endingId = 600000;
-const maxOpenRequests = 20;
+const period = 150;
+const startingId = 900000;
+const endingId = 1000000;
+const maxOpenRequests = 10;
 var openRequests = 0;
 const pendingRequests = [];
+var mainTick;
 
 const findBetween = function findBetween(iString, firstChar, lastChar) {
   const indexes = [];
@@ -41,15 +42,21 @@ const cutBefore = function cutBefore(iString, cutString) {
   }
 };
 
-const addArt = function addArt(id) {
+const addArt = function addArt(id, endingId, availableArtIds) {
 
   openRequests++;
   request.get('http://www.metmuseum.org/art/collection/search/' + id, function(error, response, body) {
     openRequests--;
     if (error) {
       console.error(error);
+      const hours = function (hours) {
+        milliseconds = hours * 60 * 60 * 1000;
+      };
       if (error.code !== 'ETIMEDOUT') {
-        setTimeout(process.exit, 10000);  
+        clearInterval(mainTick);
+        setTimeout(function() {
+          grabNew(id, endingId, availableArtIds);
+        }, hours(.5));  
       }
       return;
     }
@@ -98,13 +105,13 @@ const addAll = function(idArray) {
   var i = 0;
   var j = i;
 
-  var tick = setInterval(function() {
+  mainTick = setInterval(function() {
     j += requestsPerTick;
     for (i = i; i < j && i < length; i++) {
       addArt(idArray[i]);
     }
     if (i >= length) {
-      clearInterval(tick);
+      clearInterval(mainTick);
       console.log('WORKER COMPLETE');
       setTimeout(function() { }, 15000);//allow any remaining requests to finish
       return;
@@ -130,13 +137,13 @@ const grabNew = function grabNew(startingId, endingId, availableArtIds, required
   var i = startingId;
   var j = i;
   // THROTTLING BY TIME
-  var tick = setInterval(function() {
+  mainTick = setInterval(function() {
     if (i >= endingId) {
-      clearInterval(tick);
-      tick = setInterval(function() {
+      clearInterval(mainTick);
+      mainTick = setInterval(function() {
         if (openRequests === 0) {
           console.log('COMPLETE');
-          clearInterval(tick);
+          clearInterval(mainTick);
         }
       }, 100);//allow open request to close
       return;
@@ -146,7 +153,7 @@ const grabNew = function grabNew(startingId, endingId, availableArtIds, required
       j += requestsPerTick;
       for (i = i; i < j && i < endingId; i++) {
         if (!availableArtIds.includes(i)) {
-          addArt(i);
+          addArt(i, endingId, availableArtIds);
         }
       }
     }
@@ -160,26 +167,6 @@ const requestLauncher = function requestLauncher() {
   }
 };
 
-
-const searchMet = function searchMet(search, availableArtIds, page = 0) {
-  openRequests++;
-  request.get(`http://metmuseum.org/art/collection#!?=&offset=${page * 50}&pageSize=0&q=${search}&perPage=50`, function(error, response, body) {
-    var id;
-    var total;
-    openRequests--;
-    while (cutBefore(body, 'card__standard-image')) {
-      body = cutBefore(body, 'card__standard-image');
-      body = cutBefore(body, 'href');
-      id = findBetween(body, 'search/', '?');
-      if (!availableArtIds.includes(id)) {
-        pendingRequests.push(id);
-      } 
-    }  
-  });
-};
-
 ArtController.initArts(function(availableArtIds, requiredArtIds) {
   grabNew(startingId, endingId, availableArtIds, requiredArtIds);
-  // searchMet('rembrandt', availableArtIds);
-  // const tick = setInterval(requestLauncher, period);
 });
