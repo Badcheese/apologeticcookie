@@ -63,7 +63,7 @@ const ArtMapper = props => {
               intensity="1"
               look-at="" 
               rotation={`${lightX} ${180} ${0}`}
-              position={`${x} ${18} ${lightSide}`}/>
+              position={`${x} ${14} ${lightSide}`}/>
 
             </Entity>
           );
