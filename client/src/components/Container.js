@@ -48,7 +48,7 @@ class Container extends React.Component {
     const artPromises = [];
     const arts = this.state.arts;
     const newArts = [];
-    for (var i = 0; i < 25; i++) {
+    for (var i = 0; i < 50; i++) {
       artPromises.push(axios.get('/api/arts'));
     }
     axios.all(artPromises)
