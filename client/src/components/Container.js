@@ -48,7 +48,7 @@ class Container extends React.Component {
     const artPromises = [];
     const arts = this.state.arts;
     const newArts = [];
-    for (var i = 0; i < 50; i++) {
+    for (var i = 0; i < 100; i++) {
       artPromises.push(axios.get('/api/arts'));
     }
     axios.all(artPromises)
@@ -104,7 +104,7 @@ class Container extends React.Component {
       newArts.unshift(clickedArt);
       newArts.filter(function(art) { return art !== undefined; });
       newArts = newArts.concat(relatedArts);
-      if (numberOfClicks < 3) {
+      if (numberOfClicks < 8) {
         context.setState({
           relatedArts: newArts,
           scene: 'PhodomeScene',
